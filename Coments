@@ -1,0 +1,49 @@
+En el sync del Turno
+1 = nueva solicitud
+2 = no recibio respuesta
+3 = no aceptado
+4 = aceptado
+
+En el sync de Ventas
+1 = datos para autorizar
+2 = En Proceso
+3 = terminada
+4 = No sincronizada
+5 = Sincronizada
+6 = Cancelada
+
+sentencia = "SELECT id, cedula_vendedor  FROM turnos ORDER BY id DESC LIMIT 1; "
+
+bd = sqlite3.connect("dragon.db")
+        print("Base de datos abierta")
+        cursor = bd.cursor()
+        sentencia = "SELECT indice_canasta FROM autorizaciones WHERE id = ?;"
+        cursor.execute(sentencia, [self.posicion])
+        indice = cursor.fetchall()
+        if indice == 1:
+            sentencia = "UPDATE venta_canasta SET tipo_preset = ?, msg_lcd = ?, autorizacion = ?, cantidad_auto = ?, " \
+                        "is_auto_man_1 = ?, is_auto_man_2 = ?, is_auto_man_3 = ?, ppu_1 = ?, ppu_2 = ?, " \
+                        "ppu_3 = ?  WHERE id = ?;"
+
+        cursor.execute(sentencia, [tipo_preset, msj_lcd, autorizacion, cantidad_auto, is_auto_man_1, is_auto_man_2,
+                                   is_auto_man_3, ppu_1, ppu_2, ppu_3, self.posicion])
+        bd.commit()
+        estado_dragon = variables.estado_libre
+        sentencia = "UPDATE estado SET estado_dragon = ? WHERE id = ?;"
+        cursor.execute(sentencia, [estado_dragon, self.posicion])
+        bd.commit()
+        cursor.close()
+        bd.close()
+
+bd = sqlite3.connect("dragon.db")
+        print("Base de datos abierta")
+        cursor = bd.cursor()
+        sentencia = "UPDATE surtidor SET mangueras = ?, ppux10 = ?, placa_ob = ?, decimales_din = ?, decimales_vol = ?"\
+                    ", decimales_ppu = ?, nombre_estacion = ?, direccion_estacion = ?, lema_1 = ?, lema_2 = ?," \
+                    "p1 = ?, p2 = ?, p3 = ?, mfc_name = ?, nit_estacion = ? WHERE id = ?;"
+        cursor.execute(sentencia, [self.mangueras, self.ppux10, self.placa_ob, self.decimales_din, self.decimales_vol,
+                                   self.decimales_ppu, self.nombre_estacion, self.direccion_estacion, self.lema_1,
+                                   self.p1, self.p2, self.p3, self.mfc_name, self.nit_estacion, self.posicion])
+        bd.commit()
+        cursor.close()
+        bd.close()
